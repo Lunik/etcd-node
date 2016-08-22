@@ -124,7 +124,7 @@ class EtcdServer {
 					} 
 					this.data[key].push(value)
 				} else {
-					this.data[key] = value
+					this.data[key] = [value]
 				}
 				let storage = this.data[key]
 				res.end(JSON.stringify({
