@@ -9,4 +9,11 @@ cache:
   directories:
   - $(pwd)/node_modules
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: npm
+  email: guillaume.lunik@gmail.com
+  on:
+    tags: true
+  api_key:
+    secure: S0e/BH33PYkOpUcE8AOooMJphTzbrgpWccViqDStejLz26eOOlf7TSIKOrRsJmKtrIvmpLgOCXKPixOYhAci5nImquNdoPrFczD38UOZV2D7W6A1/G/KlsUOJqD8L48Xvfs7fdRYP2+ulRDZZbdNT28DlE/k+c0UzHh8CSLcjxZYPD2FPdPGGJL6r7DxjQGWWn0dnqOh7UJzSXDHQlaphLVoKiH99PYP60zPdHEAct0ntoTMpQ+FxP98E/F9/2amomTfrWDPPHq3XNZvLuhYyeXAc7m2xCMobrQPTjXAqwdfCHoykKatFD/zQWOjZNpiODwb+VJLqO/zPDIqQ/5A+t2rC1XL6ZNK0HEMGUc5yCFzi1UZPS41VEZL6mjUMz/FbVeH/T/iq33H9JTk2W4I76GIoe6Doqc5iOBpmEd325YpULAK5rmEYLKQwBXsHGSzvpxhvasroCrUvIY1Xvmhk2O5MEYENoj4xKoNEHQMjqDeoiOb4epJ+n72NV7eFAMkaCr2NW/NwM9UgYyUAgn5vFAM9rlO5j32YssZiUG6LG0T3CmG8N9dM1rGC63KHwnEpSLHr6Ez/sjVo7iKm/2aJAUfpHNYcrBBMFadXYcgVg0NL0GegpMoN1O4iKyez3j/i1dRkxWCvHpYYuQ2m5Vzv305gb5Pjp60bcaFrNo1Gcs=
