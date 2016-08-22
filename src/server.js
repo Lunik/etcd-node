@@ -61,13 +61,13 @@ class EtcdServer {
 			if(req.body.key){
 				let key = req.body.key
 				if(this.data[key]){
-					let value = this.data[key]
+					let storage = this.data[key]
 					res.end(JSON.stringify({
 						code: 200,
 						message: 'OK',
 						data: {
 							key: key,
-							value: value
+							value: storage
 						}
 					}))
 				} else {
@@ -89,14 +89,14 @@ class EtcdServer {
 			if(req.body.key){
 				let key = req.body.key
 				if(this.data[key]){
-					let value = this.data[key]
+					let storage = this.data[key]
 					delete this.data[key]
 					res.end(JSON.stringify({
 						code: 200,
 						message: 'OK',
 						data: {
 							key: key,
-							value: value
+							value: storage
 						}
 					}))
 				} else {
@@ -106,6 +106,35 @@ class EtcdServer {
 						key: key
 					}))
 				}
+			} else {
+				res.end(JSON.stringify({
+					code: 400,
+					message: 'Missing key.'
+				}))
+			}
+		})
+
+		this.app.post('/add', (req, res)=>{
+			if(req.body.key && req.body.value){
+				let key = req.body.key
+				let value = req.body.value
+				if(this.data[key]){
+					if(typeof this.data[key] === 'string'){
+						this.data[key] = [this.data[key]]
+					} 
+					this.data[key].push(value)
+				} else {
+					this.data[key] = value
+				}
+				let storage = this.data[key]
+				res.end(JSON.stringify({
+					code: 200,
+					message: 'OK',
+					data: {
+						key: key,
+						value: storage
+					}
+				}))
 			} else {
 				res.end(JSON.stringify({
 					code: 400,

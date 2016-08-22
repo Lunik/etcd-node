@@ -62,6 +62,25 @@ class Client {
 			}
 		})
 	}
+
+	add(key, value, cb){
+		request.post({
+			url: 'http://' + this.host + ':' +this.port + '/add',
+			form: {
+				key: key,
+				value: value
+			}
+		}, (err, res, body) =>{
+			if (!err && res.statusCode == 200) {
+				cb(JSON.parse(body))
+			} else {
+				cb({
+					code: res.statusCode,
+					message: err
+				})
+			}
+		})
+	}
 }
 
 module.exports = Client

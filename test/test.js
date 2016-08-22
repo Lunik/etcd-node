@@ -109,6 +109,43 @@ describe('Client test', ()=>{
 			done()
 		})
 	})
+
+	it('Add key2=value and key2=value2', (done)=>{
+		ClientWorker.add('key2', 'value', (data)=>{
+			assert.equal(data.code, 200)
+			assert.equal(data.data.key, 'key2')
+			assert.equal(data.data.value, 'value')
+			ClientWorker.add('key2', 'value2', (data)=>{
+				assert.equal(data.code, 200)
+				assert.equal(data.data.key, 'key2')
+				assert.equal(data.data.value[0], 'value')
+				assert.equal(data.data.value[1], 'value2')
+				done()
+			})
+		})
+	})
+
+	it('Add null=value', (done)=>{
+		ClientWorker.add(null, 'value', (data)=>{
+			assert.equal(data.code, 400)
+			done()
+		})
+	})
+
+	it('Set key3=value and add key3=value3', (done)=>{
+		ClientWorker.set('key3', 'value', (data)=>{
+			assert.equal(data.code, 200)
+			assert.equal(data.data.key, 'key3')
+			assert.equal(data.data.value, 'value')
+			ClientWorker.add('key3', 'value2', (data)=>{
+				assert.equal(data.code, 200)
+				assert.equal(data.data.key, 'key3')
+				assert.equal(data.data.value[0], 'value')
+				assert.equal(data.data.value[1], 'value2')
+				done()
+			})
+		})
+	})
 })
 
 describe('Cleanup', ()=>{
