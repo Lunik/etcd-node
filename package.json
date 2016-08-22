@@ -1,6 +1,6 @@
 {
   "name": "nodejs-etcd",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "An ETCD server for nodejs",
   "main": "src/server.js",
   "scripts": {
