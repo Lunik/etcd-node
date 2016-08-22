@@ -1,34 +1,34 @@
 'use strict'
-const assert = require('chai').assert
-const path = require('path')
-const fs = require('fs')
+var assert = require('chai').assert
+var path = require('path')
+var fs = require('fs')
 
 global.__base = path.join(__dirname, '..', '/')
 
-const savePath = path.join(__dirname, 'etcd.json')
-describe('Etcd test', ()=>{
-	const Etcd = require(path.join(__base, 'src/server.js'))
-	const EtcdWorker = new Etcd({
+var savePath = path.join(__dirname, 'etcd.json')
+describe('Etcd test', function(){
+	var Etcd = require(path.join(__base, 'src/server.js'))
+	var EtcdWorker = new Etcd({
 		savePath: savePath
 	})
-	const EtcdWorker3 = new Etcd({
+	var EtcdWorker3 = new Etcd({
 		port: 2381
 	})
 
-	it('Start / Stop server', (done)=>{
-		EtcdWorker.start((host, port)=>{
+	it('Start / Stop server', function(done){
+		EtcdWorker.start(function(host, port){
 			assert.equal(host, '127.0.0.1')
 			assert.equal(port, 2379)
 
-			const EtcdWorker2 = new Etcd({
+			var EtcdWorker2 = new Etcd({
 				port: 2380,
 				savePath: savePath
 			})
 
-			EtcdWorker2.start((host, port)=>{
+			EtcdWorker2.start(function(host, port){
 				assert.equal(host, '127.0.0.1')
 				assert.equal(port, 2380)
-				EtcdWorker3.start((host, port)=>{
+				EtcdWorker3.start(function(host, port){
 					assert.equal(host, '127.0.0.1')
 					assert.equal(port, 2381)
 					done()
@@ -36,36 +36,36 @@ describe('Etcd test', ()=>{
 			})
 		})
 	})
-	it('Save', (done)=>{
-		EtcdWorker.save((err)=>{
+	it('Save', function(done){
+		EtcdWorker.save(function(err){
 			assert(!err)
 			done()
 		})
 	})
 })
 
-describe('Client test', ()=>{
-	const Client = require(path.join(__base, 'src/client.js'))
-	const ClientWorker = new Client()
+describe('Client test', function(){
+	var Client = require(path.join(__base, 'src/client.js'))
+	var ClientWorker = new Client()
 
-	it('Set key=value', (done)=>{
-		ClientWorker.set('key', 'value', (data)=>{
+	it('Set key=value', function(done){
+		ClientWorker.set('key', 'value', function(data){
 			assert.equal(data.code, 200)
 			assert.equal(data.data.key, 'key')
 			assert.equal(data.data.value, 'value')
 			done()
 		})
 	})
-
-	it('Set null=value', (done)=>{
-		ClientWorker.set(null, 'value', (data)=>{
+	
+	it('Set null=value', function(done){
+		ClientWorker.set(null, 'value', function(data){
 			assert.equal(data.code, 400)
 			done()
 		})
 	})
 
-	it('Get key', (done)=>{
-		ClientWorker.get('key', (data)=>{
+	it('Get key', function(done){
+		ClientWorker.get('key', function(data){
 			assert.equal(data.code, 200)
 			assert.equal(data.data.key, 'key')
 			assert.equal(data.data.value, 'value')
@@ -73,22 +73,22 @@ describe('Client test', ()=>{
 		})
 	})
 
-	it('Get unknown', (done)=>{
-		ClientWorker.get('unknown', (data)=>{
+	it('Get unknown', function(done){
+		ClientWorker.get('unknown', function(data){
 			assert.equal(data.code, 204)
 			done()
 		})
 	})
 
-	it('Get null', (done)=>{
-		ClientWorker.get(null, (data)=>{
+	it('Get null', function(done){
+		ClientWorker.get(null, function(data){
 			assert.equal(data.code, 400)
 			done()
 		})
 	})
 
-	it('Delete key', (done)=>{
-		ClientWorker.delete('key', (data)=>{
+	it('Delete key', function(done){
+		ClientWorker.delete('key', function(data){
 			assert.equal(data.code, 200)
 			assert.equal(data.data.key, 'key')
 			assert.equal(data.data.value, 'value')
@@ -96,26 +96,26 @@ describe('Client test', ()=>{
 		})
 	})
 
-	it('Delete unknown', (done)=>{
-		ClientWorker.delete('unknown', (data)=>{
+	it('Delete unknown', function(done){
+		ClientWorker.delete('unknown', function(data){
 			assert.equal(data.code, 204)
 			done()
 		})
 	})
 
-	it('Delete null', (done)=>{
-		ClientWorker.delete(null, (data)=>{
+	it('Delete null', function(done){
+		ClientWorker.delete(null, function(data){
 			assert.equal(data.code, 400)
 			done()
 		})
 	})
 
-	it('Add key2=value and key2=value2', (done)=>{
-		ClientWorker.add('key2', 'value', (data)=>{
+	it('Add key2=value and key2=value2', function(done){
+		ClientWorker.add('key2', 'value', function(data){
 			assert.equal(data.code, 200)
 			assert.equal(data.data.key, 'key2')
 			assert.equal(data.data.value, 'value')
-			ClientWorker.add('key2', 'value2', (data)=>{
+			ClientWorker.add('key2', 'value2', function(data){
 				assert.equal(data.code, 200)
 				assert.equal(data.data.key, 'key2')
 				assert.equal(data.data.value[0], 'value')
@@ -125,19 +125,19 @@ describe('Client test', ()=>{
 		})
 	})
 
-	it('Add null=value', (done)=>{
-		ClientWorker.add(null, 'value', (data)=>{
+	it('Add null=value', function(done){
+		ClientWorker.add(null, 'value', function(data){
 			assert.equal(data.code, 400)
 			done()
 		})
 	})
 
-	it('Set key3=value and add key3=value3', (done)=>{
-		ClientWorker.set('key3', 'value', (data)=>{
+	it('Set key3=value and add key3=value3', function(done){
+		ClientWorker.set('key3', 'value', function(data){
 			assert.equal(data.code, 200)
 			assert.equal(data.data.key, 'key3')
 			assert.equal(data.data.value, 'value')
-			ClientWorker.add('key3', 'value2', (data)=>{
+			ClientWorker.add('key3', 'value2', function(data){
 				assert.equal(data.code, 200)
 				assert.equal(data.data.key, 'key3')
 				assert.equal(data.data.value[0], 'value')
@@ -148,9 +148,9 @@ describe('Client test', ()=>{
 	})
 })
 
-describe('Cleanup', ()=>{
-	it('Remove etcd.json', (done)=>{
-		fs.unlink(savePath, (err)=>{
+describe('Cleanup', function(){
+	it('Remove etcd.json', function(done){
+		fs.unlink(savePath, function(err){
 			assert(!err)
 			done()
 		})
