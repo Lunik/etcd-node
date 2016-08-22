@@ -1,0 +1,13 @@
+notifications:
+  email: false
+language: node_js
+node_js:
+- '6'
+- '5'
+script:
+- npm test
+cache:
+  directories:
+  - $(pwd)/node_modules
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

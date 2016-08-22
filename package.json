@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-etcd",
+  "version": "0.0.1",
+  "description": "An ETCD server for nodejs",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "istanbul cover _mocha -- -R spec test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lunik/nodejs-etcd.git"
+  },
+  "keywords": [
+    "etcd"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lunik/nodejs-etcd/issues"
+  },
+  "homepage": "https://github.com/Lunik/nodejs-etcd#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2",
+    "nodemon": "^1.10.2"
+  }
+}
