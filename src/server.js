@@ -37,7 +37,7 @@ function Server (config) {
     extended: true
   }))
 
-  self.app.put('/etcd', function (req, res) {
+  self.app.put('/set', function (req, res) {
     if (req.body.key && req.body.value) {
       var key = req.body.key
       var value = req.body.value
@@ -56,63 +56,99 @@ function Server (config) {
         message: 'Missing key or value.'
       }))
     }
+  })
 
-    self.app.get('/etcd', function (req, res) {
-      if (req.body.key) {
-        var key = req.body.key
-        if (self.data[key]) {
-          var storage = self.data[key]
-          res.end(JSON.stringify({
-            code: 200,
-            message: 'OK',
-            data: {
-              key: key,
-              value: storage
-            }
-          }))
-        } else {
-          res.end(JSON.stringify({
-            code: 204,
-            message: 'No content for this key.',
-            key: key
-          }))
-        }
+  self.app.get('/get', function (req, res) {
+    if (req.body.key) {
+      var key = req.body.key
+      if (self.data[key]) {
+        var storage = self.data[key]
+        res.end(JSON.stringify({
+          code: 200,
+          message: 'OK',
+          data: {
+            key: key,
+            value: storage
+          }
+        }))
       } else {
         res.end(JSON.stringify({
-          code: 400,
-          message: 'Missing key.'
+          code: 204,
+          message: 'No content for this key.',
+          key: key
         }))
       }
-    })
+    } else {
+      res.end(JSON.stringify({
+        code: 400,
+        message: 'Missing key.'
+      }))
+    }
+  })
 
-    self.app.delete('/etcd', function (req, res) {
-      if (req.body.key) {
-        var key = req.body.key
-        if (self.data[key]) {
-          var storage = self.data[key]
-          delete self.data[key]
-          res.end(JSON.stringify({
-            code: 200,
-            message: 'OK',
-            data: {
-              key: key,
-              value: storage
-            }
-          }))
-        } else {
-          res.end(JSON.stringify({
-            code: 204,
-            message: 'No content for this key.',
-            key: key
-          }))
-        }
+  self.app.get('/find', function (req, res) {
+    if(req.body.regex){
+      var regex = req.body.regex
+      var keys = Object.keys(self.data)
+      if(keys.length > 0){
+        var list = {}
+
+        keys.forEach(function(key, index){
+          list[key] = self.data[key]
+
+          if(index >= keys.length-1){
+            res.end(JSON.stringify({
+              code: 200,
+              message: 'OK',
+              data: {
+                regex: regex,
+                value: list
+              }
+            }))
+          }
+        })
       } else {
         res.end(JSON.stringify({
-          code: 400,
-          message: 'Missing key.'
+          code: 204,
+          message: 'No content for this regex.',
+          regex: regex
         }))
       }
-    })
+    } else {
+      res.end(JSON.stringify({
+        code: 400,
+        message: 'Missing regex.'
+      }))
+    }
+  })
+
+  self.app.delete('/delete', function (req, res) {
+    if (req.body.key) {
+      var key = req.body.key
+      if (self.data[key]) {
+        var storage = self.data[key]
+        delete self.data[key]
+        res.end(JSON.stringify({
+          code: 200,
+          message: 'OK',
+          data: {
+            key: key,
+            value: storage
+          }
+        }))
+      } else {
+        res.end(JSON.stringify({
+          code: 204,
+          message: 'No content for this key.',
+          key: key
+        }))
+      }
+    } else {
+      res.end(JSON.stringify({
+        code: 400,
+        message: 'Missing key.'
+      }))
+    }
   })
 }
 

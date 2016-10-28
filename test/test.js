@@ -87,6 +87,34 @@ describe('Client test', function () {
     })
   })
 
+  it('Set key.test.dsqdqs=value', function (done) {
+    ClientWorker.set('key.test.dsqdqs', 'value', function (data) {
+      assert.equal(data.code, 200)
+      assert.equal(data.data.key, 'key.test.dsqdqs')
+      assert.equal(data.data.value, 'value')
+      done()
+    })
+  })
+
+  it('Set key.test.dsqdz=value', function (done) {
+    ClientWorker.set('key.test.dsqdz', 'value', function (data) {
+      assert.equal(data.code, 200)
+      assert.equal(data.data.key, 'key.test.dsqdz')
+      assert.equal(data.data.value, 'value')
+      done()
+    })
+  })
+
+  it('Find /key.*/', function(done){
+    ClientWorker.find('/key.*/', function(data){
+      assert.equal(data.code, 200)
+      assert.equal(data.data.regex, '/key.*/')
+      assert.equal(data.data.value["key.test.dsqdqs"], 'value')
+      assert.equal(data.data.value["key.test.dsqdz"], 'value')
+      done()
+    })
+  })
+
   it('Delete key', function (done) {
     ClientWorker.delete('key', function (data) {
       assert.equal(data.code, 200)
