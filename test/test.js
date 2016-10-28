@@ -109,43 +109,6 @@ describe('Client test', function () {
       done()
     })
   })
-
-  it('Add key2=value and key2=value2', function (done) {
-    ClientWorker.add('key2', 'value', function (data) {
-      assert.equal(data.code, 200)
-      assert.equal(data.data.key, 'key2')
-      assert.equal(data.data.value, 'value')
-      ClientWorker.add('key2', 'value2', function (data) {
-        assert.equal(data.code, 200)
-        assert.equal(data.data.key, 'key2')
-        assert.equal(data.data.value[0], 'value')
-        assert.equal(data.data.value[1], 'value2')
-        done()
-      })
-    })
-  })
-
-  it('Add null=value', function (done) {
-    ClientWorker.add(null, 'value', function (data) {
-      assert.equal(data.code, 400)
-      done()
-    })
-  })
-
-  it('Set key3=value and add key3=value3', function (done) {
-    ClientWorker.set('key3', 'value', function (data) {
-      assert.equal(data.code, 200)
-      assert.equal(data.data.key, 'key3')
-      assert.equal(data.data.value, 'value')
-      ClientWorker.add('key3', 'value2', function (data) {
-        assert.equal(data.code, 200)
-        assert.equal(data.data.key, 'key3')
-        assert.equal(data.data.value[0], 'value')
-        assert.equal(data.data.value[1], 'value2')
-        done()
-      })
-    })
-  })
 })
 
 describe('Cleanup', function () {

@@ -9,8 +9,8 @@ function Client (config) {
 }
 
 Client.prototype.set = function (key, value, cb) {
-  request.post({
-    url: 'http://' + this.host + ':' + this.port + '/set',
+  request.put({
+    url: 'http://' + this.host + ':' + this.port + '/etcd',
     form: {
       key: key,
       value: value
@@ -28,8 +28,8 @@ Client.prototype.set = function (key, value, cb) {
 }
 
 Client.prototype.get = function (key, cb) {
-  request.post({
-    url: 'http://' + this.host + ':' + this.port + '/get',
+  request.get({
+    url: 'http://' + this.host + ':' + this.port + '/etcd',
     form: {
       key: key
     }
@@ -46,8 +46,8 @@ Client.prototype.get = function (key, cb) {
 }
 
 Client.prototype.delete = function (key, cb) {
-  request.post({
-    url: 'http://' + this.host + ':' + this.port + '/delete',
+  request.delete({
+    url: 'http://' + this.host + ':' + this.port + '/etcd',
     form: {
       key: key
     }

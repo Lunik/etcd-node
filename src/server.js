@@ -37,7 +37,7 @@ function Server (config) {
     extended: true
   }))
 
-  self.app.post('/set', function (req, res) {
+  self.app.put('/etcd', function (req, res) {
     if (req.body.key && req.body.value) {
       var key = req.body.key
       var value = req.body.value
@@ -56,92 +56,63 @@ function Server (config) {
         message: 'Missing key or value.'
       }))
     }
-  })
 
-  self.app.post('/get', function (req, res) {
-    if (req.body.key) {
-      var key = req.body.key
-      if (self.data[key]) {
-        var storage = self.data[key]
-        res.end(JSON.stringify({
-          code: 200,
-          message: 'OK',
-          data: {
-            key: key,
-            value: storage
-          }
-        }))
-      } else {
-        res.end(JSON.stringify({
-          code: 204,
-          message: 'No content for this key.',
-          key: key
-        }))
-      }
-    } else {
-      res.end(JSON.stringify({
-        code: 400,
-        message: 'Missing key.'
-      }))
-    }
-  })
-
-  self.app.post('/delete', function (req, res) {
-    if (req.body.key) {
-      var key = req.body.key
-      if (self.data[key]) {
-        var storage = self.data[key]
-        delete self.data[key]
-        res.end(JSON.stringify({
-          code: 200,
-          message: 'OK',
-          data: {
-            key: key,
-            value: storage
-          }
-        }))
-      } else {
-        res.end(JSON.stringify({
-          code: 204,
-          message: 'No content for this key.',
-          key: key
-        }))
-      }
-    } else {
-      res.end(JSON.stringify({
-        code: 400,
-        message: 'Missing key.'
-      }))
-    }
-  })
-
-  self.app.post('/add', function (req, res) {
-    if (req.body.key && req.body.value) {
-      var key = req.body.key
-      var value = req.body.value
-      if (self.data[key]) {
-        if (typeof self.data[key] === 'string') {
-          self.data[key] = [self.data[key]]
+    self.app.get('/etcd', function (req, res) {
+      if (req.body.key) {
+        var key = req.body.key
+        if (self.data[key]) {
+          var storage = self.data[key]
+          res.end(JSON.stringify({
+            code: 200,
+            message: 'OK',
+            data: {
+              key: key,
+              value: storage
+            }
+          }))
+        } else {
+          res.end(JSON.stringify({
+            code: 204,
+            message: 'No content for this key.',
+            key: key
+          }))
         }
-        self.data[key].push(value)
       } else {
-        self.data[key] = [value]
+        res.end(JSON.stringify({
+          code: 400,
+          message: 'Missing key.'
+        }))
       }
-      var storage = self.data[key]
-      res.end(JSON.stringify({
-        code: 200,
-        message: 'OK',
-        data: {
-          key: key,
-          value: storage
+    })
+
+    self.app.delete('/etcd', function (req, res) {
+      if (req.body.key) {
+        var key = req.body.key
+        if (self.data[key]) {
+          var storage = self.data[key]
+          delete self.data[key]
+          res.end(JSON.stringify({
+            code: 200,
+            message: 'OK',
+            data: {
+              key: key,
+              value: storage
+            }
+          }))
+        } else {
+          res.end(JSON.stringify({
+            code: 204,
+            message: 'No content for this key.',
+            key: key
+          }))
         }
-      }))
-    } else {
-      res.end(JSON.stringify({
-        code: 400,
-        message: 'Missing key or value.'
-      }))
-    }
+      } else {
+        res.end(JSON.stringify({
+          code: 400,
+          message: 'Missing key.'
+        }))
+      }
+    })
   })
 }
 
